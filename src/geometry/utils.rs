@@ -1,3 +1,4 @@
+use crate::tree::Octree;
 use super::{Point,Vector,Trigon};
 
 pub fn distance(p1: &Point, p2: &Point) -> f64 {
@@ -7,8 +8,19 @@ pub fn distance(p1: &Point, p2: &Point) -> f64 {
     (sqr_delta_x + sqr_delta_y + sqr_delta_z).sqrt()
 }
 
-pub fn trigon_brightness(light_pos: &Point, trigon: &Trigon) -> u8 {
-    let light_vector = Vector::from(&trigon.centroid - light_pos);
+pub fn trigon_brightness(
+    light_pos: &Point,
+    trigon: &Trigon,
+    tree: &Octree,
+) -> u8 {
+    let mut light_vector = Vector::from(&trigon.centroid - light_pos);
+    light_vector.set_origin(&light_pos);
+
+    let (distance, obstacle) = tree.intersection(&light_vector);
+
+    if distance < std::f64::INFINITY && obstacle.unwrap() != trigon {
+        return 0;
+    }
 
     let (a, b, c) = (
         trigon.normal.x,
@@ -24,7 +36,7 @@ pub fn trigon_brightness(light_pos: &Point, trigon: &Trigon) -> u8 {
     let len1 = trigon.normal.length;
     let len2 = light_vector.length;
 
-    let cos = (a * m + b * n + c * p) / (len1 * len2) - 1.;
+    let cos = (a * m + b * n + c * p).abs() / (len1 * len2);
 
-    (cos.abs() * 128.).floor() as u8
+    (cos * 255.).floor() as u8
 }

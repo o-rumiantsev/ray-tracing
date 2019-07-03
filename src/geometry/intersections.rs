@@ -7,12 +7,12 @@ use super::Trigon;
 use crate::tree::BoundingBox;
 
 pub fn intersection(vector: &Vector, face: &Trigon) -> f64 {
-    let p1 = &face.points[0];
-    let p2 = &face.points[1];
-    let p3 = &face.points[2];
+    let p0 = &face.points[0];
+    let p1 = &face.points[1];
+    let p2 = &face.points[2];
 
-    let edge1 = Vector::from(p2 - p1);
-    let edge2 = Vector::from(p3 - p1);
+    let edge1 = Vector::from(p1 - p0);
+    let edge2 = Vector::from(p2 - p0);
 
     let pvec = vector.cross_product(&edge2);
     let det = edge1.dot_product(&pvec);
@@ -21,21 +21,23 @@ pub fn intersection(vector: &Vector, face: &Trigon) -> f64 {
         return INFINITY;
     }
 
-    let tvec = Vector::from(vector.origin - p1);
-    let u = tvec.dot_product(&pvec) / det;
+    let inv_det = 1.0 / det;
+
+    let tvec = Vector::from(vector.origin - p0);
+    let u = tvec.dot_product(&pvec) * inv_det;
 
     if u < 0. || u > 1. {
         return INFINITY;
     }
 
     let qvec = tvec.cross_product(&edge1);
-    let v = vector.dot_product(&qvec) / det;
+    let v = vector.dot_product(&qvec) * inv_det;
 
     if v < 0. || u + v > 1. {
         return INFINITY;
     }
 
-    edge2.dot_product(&qvec) / det
+    edge2.dot_product(&qvec) * inv_det
 }
 
 pub fn vector_box_intersection(

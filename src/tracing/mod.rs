@@ -26,7 +26,11 @@ pub fn trace(
         let (distance, trigon) = tree.intersection(&vector);
 
         if distance < INFINITY {
-            let brightness = trigon_brightness(light_pos, &trigon.unwrap());
+            let brightness = trigon_brightness(
+                light_pos,
+                &trigon.unwrap(),
+                &tree,
+            );
             img.set_pixel(
                 x,
                 y,

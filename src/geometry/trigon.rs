@@ -1,3 +1,4 @@
+use std::cmp::PartialEq;
 use super::point::Point;
 use super::vector::Vector;
 
@@ -25,5 +26,13 @@ impl<'a> Trigon<'a> {
             normal,
             centroid,
         }
+    }
+}
+
+impl<'a> PartialEq for Trigon<'a> {
+    fn eq(&self, other: &Self) -> bool {
+        self.points[0] == other.points[0] &&
+            self.points[1] == other.points[1] &&
+            self.points[2] == other.points[2]
     }
 }

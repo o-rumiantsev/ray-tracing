@@ -1,3 +1,4 @@
+use std::cmp::PartialEq;
 use std::ops::{Add, Sub, Mul};
 
 #[derive(Debug,Clone)]
@@ -82,6 +83,14 @@ impl<'a, 'b> Mul<&'b Point> for &'a Point {
             y: self.y * other.y,
             z: self.z * other.z,
         }
+    }
+}
+
+impl PartialEq for Point {
+    fn eq(&self, other: &Self) -> bool {
+        self.x == other.x &&
+            self.y == other.y &&
+            self.z == other.z
     }
 }
 

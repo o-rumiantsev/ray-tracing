@@ -28,8 +28,8 @@ fn main() {
     let width: u32 = argv[2].parse().unwrap();
     let height: u32 = argv[3].parse().unwrap();
 
-    let camera_pos = Point::new(0., -1., 0.);
-    let light_pos = Point::new(0., 0., 1.);
+    let camera_pos = Point::new(0., -3., 0.);
+    let light_pos = Point::new(1.5, -1.5, 1.5);
     let faces = fetch_object(OBJECTS_DIR, object_name.as_str());
 
     let img = trace(width, height, &camera_pos, &light_pos, &faces);
