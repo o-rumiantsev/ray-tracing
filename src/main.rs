@@ -28,11 +28,17 @@ fn main() {
     let width: u32 = argv[2].parse().unwrap();
     let height: u32 = argv[3].parse().unwrap();
 
-    let camera_pos = Point::new(0., -3., 0.);
+    let camera_pos = Point::new(1., -0.5, 0.);
+    let mut view_vector = geometry::Vector::new(-3., 2., 0.);
+    view_vector.set_origin(&camera_pos);
+
+    let mut up_vector = geometry::Vector::new(0., 0., 1.);
+    up_vector.set_origin(&camera_pos);
+
     let light_pos = Point::new(1.5, -1.5, 1.5);
     let faces = fetch_object(OBJECTS_DIR, object_name.as_str());
 
-    let img = trace(width, height, &camera_pos, &light_pos, &faces);
+    let img = trace(width, height, &view_vector, &up_vector, &light_pos, &faces);
 
     let path = format!("{}/{}.bmp", IMAGES_DIR, object_name);
     img.save(path).expect("Cannot save image");

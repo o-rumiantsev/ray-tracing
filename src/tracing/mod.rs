@@ -9,14 +9,16 @@ use crate::canvas;
 pub fn trace(
     width: u32,
     height: u32,
-    camera_pos: &Point,
+    view_vector: &Vector,
+    up_vector: &Vector,
     light_pos: &Point,
     faces: &Vec<Trigon>
 ) -> Image {
     let tree = Octree::new(&faces);
 
     let mut img = Image::new(width, height);
-    let pixels = canvas::build(height, width,-0.5,0.5,90.);
+    let pixels = canvas::build(width, height, view_vector, up_vector,90.);
+    let camera_pos = view_vector.origin;
 
     for (x, y) in img.coordinates() {
         let pixel = &pixels[y as usize][x as usize];

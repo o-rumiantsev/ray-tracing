@@ -1,5 +1,6 @@
 use std::cmp::PartialEq;
 use std::ops::{Add, Sub, Mul};
+use super::Vector;
 
 #[derive(Debug,Clone)]
 pub struct Point {
@@ -11,6 +12,14 @@ pub struct Point {
 impl Point {
     pub fn new(x: f64, y: f64, z: f64) -> Self {
         Point { x, y, z }
+    }
+
+    pub fn from(vector: &Vector) -> Self {
+        Point {
+            x: vector.x,
+            y: vector.y,
+            z: vector.z,
+        }
     }
 }
 
